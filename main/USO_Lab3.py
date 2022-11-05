@@ -77,51 +77,48 @@ def zad1():
     sine=np.sin(2*np.pi*t)
     # simulate
     # system 1
-    ts1,ys1,xs1=(system1,step,t)
-    ti1, yi1, xi1 = (system1, impulse, t)
-    tsine1, ysine1, xsine1 = (system1, sine, t)
+    ts1,ys1,xs1=sig.lsim2(system1,step,t)
+    ti1, yi1, xi1 = sig.lsim2(system1, impulse, t)
+    tsine1, ysine1, xsine1 = sig.lsim2(system1, sine, t)
     # system 2
-    ts2, ys2, xs2 = (system2, step, t)
-    ti2, yi2, xi2 = (system2, impulse, t)
-    tsine2, ysine2, xsine2 = (system2, sine, t)
+    ts2, ys2, xs2 = sig.lsim2(system2, step, t)
+    ti2, yi2, xi2 = sig.lsim2(system2, impulse, t)
+    tsine2, ysine2, xsine2 = sig.lsim2(system2, sine, t)
     # system 3
-    ts3, ys3, xs3 = (system3, step, t)
-    ti3, yi3, xi3 = (system3, impulse, t)
-    tsine3, ysine3, xsine3 = (system3, sine, t)
+    ts3, ys3, xs3 = sig.lsim2(system3, step, t)
+    ti3, yi3, xi3 = sig.lsim2(system3, impulse, t)
+    tsine3, ysine3, xsine3 = sig.lsim2(system3, sine, t)
     # system 4
-    ts4, ys4, xs4 = (system4, step, t)
-    ti4, yi4, xi4 = (system4, impulse, t)
-    tsine4, ysine4, xsine4 = (system4, sine, t)
+    ts4, ys4, xs4 = sig.lsim2(system4, step, t)
+    ti4, yi4, xi4 = sig.lsim2(system4, impulse, t)
+    tsine4, ysine4, xsine4 = sig.lsim2(system4, sine, t)
     #plotting
     # system 1
-    plt.figure()
+    plt.figure(1)
     plt.plot(t,ys1,label='Step system 1',color='r')
     #plt.plot(t,yi1,label='Impulse system 1',color='b')
     plt.plot(t,ysine1,label='Sine system 1',color='k')
     plt.xlabel('Time')
     plt.ylabel('System 1')
     plt.legend()
-    plt.show()
     # system 2
-    plt.figure()
+    plt.figure(2)
     plt.plot(t, ys2, label='Step system 2', color='r')
     #plt.plot(t, yi2, label='Impulse system 2', color='b')
     plt.plot(t, ysine2, label='Sine system 2', color='k')
     plt.xlabel('Time')
     plt.ylabel('System 2')
     plt.legend()
-    plt.show()
     # system 3
-    plt.figure()
+    plt.figure(3)
     plt.plot(t, ys3, label='Step system 3', color='r')
     #plt.plot(t, yi3, label='Impulse system 3', color='b')
     plt.plot(t, ysine3, label='Sine system 3', color='k')
     plt.xlabel('Time')
     plt.ylabel('System 3')
     plt.legend()
-    plt.show()
     # system 4
-    plt.figure()
+    plt.figure(4)
     plt.plot(t, ys4, label='Step system 4', color='r')
     #plt.plot(t, yi4, label='Impulse system 4', color='b')
     plt.plot(t, ysine4, label='Sine system 4', color='k')
@@ -129,6 +126,7 @@ def zad1():
     plt.ylabel('System 4')
     plt.legend()
     plt.show()
+
 
 
 
