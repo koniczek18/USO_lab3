@@ -1,27 +1,18 @@
 import numpy as np
 import scipy.signal as sig
-from scipy.integrate import odeint
+#from scipy.integrate import odeint
 import matplotlib.pyplot as plt
+import control
 
+#Kod zawiera pakiet 'control'
 
-def kalmanMatrixSS(A, B, n):
-    col1 = B
-    col2 = np.dot(A, B)
-    col3 = np.dot(np.dot(A, A), B)
-    if n == 2:
-        return np.column_stack([col1, col2])
-    elif n == 3:
-        return np.column_stack([col1, col2, col3])
-
-
-def checkControllability(KM, n):
-    if np.linalg.matrix_rank(KM) == n:
-        return 'jest sterowalny'
+def checkControllability(cal,n):
+    if np.linalg.matrix_rank(cal)==n:
+        return('jest sterowalny.')
     else:
-        return 'nie jest sterowalny'
+        return('nie jest sterowalny')
 
-
-def zad1():
+def zadanie():
     # initialise RLC parameters
     r1 = 1
     r2 = 2
@@ -35,100 +26,114 @@ def zad1():
     # system1 init
     A1 = np.array([[-1 / (r2 * c1), 0], [0, -1 / (r4 * c05)]])
     B1 = np.array([[1 / (r2 * c1)], [1 / (r4 * c05)]])
-    C1 = np.array([[-1, 0], [0, -1]])
-    D1 = np.array([[1], [1]])
-    system1 = sig.lti(A1, B1, C1, D1)
-    n1 = 2
+    C1a = np.array([1, 0])
+    C1b = np.array([0, 1])
+    D1 = np.array([0])
+    system1a = sig.lti(A1, B1, C1a, D1)
+    system1b = sig.lti(A1, B1, C1b, D1)
     # system2 init
     A2 = np.array([[-1 / (r1 * c1), 0, 0], [0, -1 / (r1 * c2), 0], [0, 0, -1 / (r1 * c3)]])
     B2 = np.array([[1 / (r1 * c1)], [1 / (r1 * c2)], [1 / (r1 * c3)]])
-    C2 = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
-    D2 = np.array([[1], [1], [1]])
-    system2 = sig.lti(A2, B2, C2, D2)
-    n2 = 3
+    C2a = np.array([1, 0, 0])
+    C2b = np.array([0, 1, 0])
+    C2c = np.array([0, 0, 1])
+    D2 = np.array([0])
+    system2a = sig.lti(A2, B2, C2a, D2)
+    system2b = sig.lti(A2, B2, C2b, D2)
+    system2c = sig.lti(A2, B2, C2c, D2)
     # system3 init
-    A3 = np.array([0])
+    A3 = np.array([-1/c1*r1])
     B3 = np.array([0])
     C3 = np.array([1])
     D3 = np.array([0])
     system3 = sig.lti(A3, B3, C3, D3)
-    # n3 = ???
+    # n3 =
     # system4 init
     A4 = np.array([[-r2 / l05, 0, -1 / l05], [0, 0, 1 / l1], [1 / c2, -1 / c2, -1 / (r1 * c2)]])
     B4 = np.array([[1 / l05], [0], [0]])
-    C4 = np.array([[0,0,0],[0,0,0],[0,0,1]])
-    D4 = np.array([[0],[0],[0]])
-    system4 = sig.lti(A4, B4, C4, D4)
+    C4a = np.array([1,0,0])
+    C4b = np.array([0, 1, 0])
+    C4c = np.array([0, 0, 1])
+    D4 = np.array([0])
+    system4a = sig.lti(A4, B4, C4a, D4)
+    system4b = sig.lti(A4, B4, C4b, D4)
+    system4c = sig.lti(A4, B4, C4c, D4)
     n4 = 3
-    # task 1.2
-    KM1 = kalmanMatrixSS(A1, B1, n1)
-    print('System 1', checkControllability(KM1, n1))
-    KM2 = kalmanMatrixSS(A2, B2, n2)
-    print('System 2', checkControllability(KM2, n2))
-    # KM3 nie wiem
-    print('System 3 jest ???')
-    KM4 = kalmanMatrixSS(A4, B4, n4)
-    print('System 4', checkControllability(KM4, n4))
+    # control check
+    cal1=control.ctrb(A1,B1)
+    cal2 = control.ctrb(A2, B2)
+    cal3= control.ctrb(A3, B3)
+    cal4 = control.ctrb(A4, B4)
+    print(cal1)
+    print(cal2)
+    print(cal3)
+    print(cal4)
+    print('System 1',checkControllability(cal1,2))
+    print('System 2', checkControllability(cal2,3))
+    print('System 3', checkControllability(cal3,1))
+    print('System 4', checkControllability(cal4,3))
     # simulation init
     t = np.linspace(0, 10, 1001)
     step = np.ones_like(t)
-    impulse = np.zeros(1001)
-    impulse[0] = 100000
     sine=np.sin(2*np.pi*t)
     # simulate
     # system 1
-    ts1,ys1,xs1=sig.lsim2(system1,step,t)
-    ti1, yi1, xi1 = sig.lsim2(system1, impulse, t)
-    tsine1, ysine1, xsine1 = sig.lsim2(system1, sine, t)
+    ts1a,ys1a,xs1a=sig.lsim2(system1a,step,t)
+    tsine1a, ysine1a, xsine1a = sig.lsim2(system1a, sine, t)
+    ts1b, ys1b, xs1b = sig.lsim2(system1b, step, t)
+    tsine1b, ysine1b, xsine1b = sig.lsim2(system1b, sine, t)
     # system 2
-    ts2, ys2, xs2 = sig.lsim2(system2, step, t)
-    ti2, yi2, xi2 = sig.lsim2(system2, impulse, t)
-    tsine2, ysine2, xsine2 = sig.lsim2(system2, sine, t)
+    ts2a, ys2a, xs2a = sig.lsim2(system2a, step, t)
+    tsine2a, ysine2a, xsine2a = sig.lsim2(system2a, sine, t)
+    ts2b, ys2b, xs2b = sig.lsim2(system2b, step, t)
+    tsine2b, ysine2b, xsine2b = sig.lsim2(system2b, sine, t)
+    ts2c, ys2c, xs2c = sig.lsim2(system2c, step, t)
+    tsine2c, ysine2c, xsine2c = sig.lsim2(system2c, sine, t)
     # system 3
-    ts3, ys3, xs3 = sig.lsim2(system3, step, t)
-    ti3, yi3, xi3 = sig.lsim2(system3, impulse, t)
-    tsine3, ysine3, xsine3 = sig.lsim2(system3, sine, t)
+    #pominęty, widać brak sterowalności
     # system 4
-    ts4, ys4, xs4 = sig.lsim2(system4, step, t)
-    ti4, yi4, xi4 = sig.lsim2(system4, impulse, t)
-    tsine4, ysine4, xsine4 = sig.lsim2(system4, sine, t)
+    ts4a, ys4a, xs4a = sig.lsim2(system4a, step, t)
+    tsine4a, ysine4a, xsine4a = sig.lsim2(system4a, sine, t)
+    ts4b, ys4b, xs4b = sig.lsim2(system4b, step, t)
+    tsine4b, ysine4b, xsine4b = sig.lsim2(system4b, sine, t)
+    ts4c, ys4c, xs4c = sig.lsim2(system4c, step, t)
+    tsine4c, ysine4c, xsine4c = sig.lsim2(system4c, sine, t)
     #plotting
     # system 1
     plt.figure(1)
-    plt.plot(t,ys1,label='Step system 1',color='r')
-    #plt.plot(t,yi1,label='Impulse system 1',color='b')
-    plt.plot(t,ysine1,label='Sine system 1',color='k')
+    plt.plot(t,ys1a,label='Step system 1.1')
+    plt.plot(t,ysine1a,label='Sine system 1.1')
+    plt.plot(t, ys1b, label='Step system 1.2')
+    plt.plot(t, ysine1b, label='Sine system 1.2')
     plt.xlabel('Time')
     plt.ylabel('System 1')
     plt.legend()
     # system 2
     plt.figure(2)
-    plt.plot(t, ys2, label='Step system 2', color='r')
-    #plt.plot(t, yi2, label='Impulse system 2', color='b')
-    plt.plot(t, ysine2, label='Sine system 2', color='k')
+    plt.plot(t, ys2a, label='Step system 2.1')
+    plt.plot(t, ysine2a, label='Sine system 2.1')
+    plt.plot(t, ys2b, label='Step system 2.2')
+    plt.plot(t, ysine2b, label='Sine system 2.2')
+    plt.plot(t, ys2c, label='Step system 2.3')
+    plt.plot(t, ysine2c, label='Sine system 2.3')
     plt.xlabel('Time')
     plt.ylabel('System 2')
     plt.legend()
     # system 3
-    plt.figure(3)
-    plt.plot(t, ys3, label='Step system 3', color='r')
-    #plt.plot(t, yi3, label='Impulse system 3', color='b')
-    plt.plot(t, ysine3, label='Sine system 3', color='k')
-    plt.xlabel('Time')
-    plt.ylabel('System 3')
-    plt.legend()
+    #pominięty
     # system 4
     plt.figure(4)
-    plt.plot(t, ys4, label='Step system 4', color='r')
-    #plt.plot(t, yi4, label='Impulse system 4', color='b')
-    plt.plot(t, ysine4, label='Sine system 4', color='k')
+    plt.plot(t, ys4a, label='Step system 4.1')
+    plt.plot(t, ysine4a, label='Sine system 4.1')
+    plt.plot(t, ys4b, label='Step system 4.2')
+    plt.plot(t, ysine4b, label='Sine system 4.2')
+    plt.plot(t, ys4c, label='Step system 4.3')
+    plt.plot(t, ysine4c, label='Sine system 4.3')
     plt.xlabel('Time')
     plt.ylabel('System 4')
     plt.legend()
     plt.show()
 
 
-
-
 if __name__ == '__main__':
-    zad1()
+    zadanie()
