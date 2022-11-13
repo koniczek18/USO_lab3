@@ -197,9 +197,18 @@ def zadanie2(active):
 
 def zadanie3(active):
     if active:
-        pass
+        r1 = 1
+        c1 = 1
+        c2 = 2
+        c3 = 3
+        A2 = np.array([[-1 / (r1 * c1), 0, 0], [0, -1 / (r1 * c2), 0], [0, 0, -1 / (r1 * c3)]])
+        B2 = np.array([[1 / (r1 * c1)], [1 / (r1 * c2)], [1 / (r1 * c3)]])
+        C2a = np.array([1, 0, 0])
+        C2b = np.array([0, 1, 0])
+        C2c = np.array([0, 0, 1])
+
 
 if __name__ == '__main__':
-    zadanie1(True)
+    zadanie1(False)
     zadanie2(False)
-    #zadanie3(False)
+    zadanie3(True)
