@@ -209,6 +209,6 @@ def zadanie3(active):
 
 
 if __name__ == '__main__':
-    zadanie1(False)
+    zadanie1(True)
     zadanie2(False)
-    zadanie3(True)
+    #zadanie3(False)
