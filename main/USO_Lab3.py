@@ -194,6 +194,12 @@ def zadanie2(active):
         #       powinniśmy wybierać takie zmienne stanu, które zapewnią nam postać sterowalną układu, a zarazem
         #       pozwolą na logiczną (realną) interpretację zmiennych stanu (co one opisują)
 
+
+def zadanie3(active):
+    if active:
+        pass
+
 if __name__ == '__main__':
-    zadanie1(False)
-    zadanie2(True)
+    zadanie1(True)
+    zadanie2(False)
+    #zadanie3(False)
