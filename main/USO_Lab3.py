@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import control
 
 #Kod zawiera pakiet 'control'
-#Powinno w danym momencie być aktywne jedno zadanie w mainie (inaczej wystąpią problemy z wyświetlaniem wykresów
+#Powinno w danym momencie być aktywne jedno zadanie w mainie (inaczej wystąpią problemy z wyświetlaniem wykresów)
 
 def checkControllability(cal,n):
     if np.linalg.matrix_rank(cal)==n:
@@ -160,7 +160,7 @@ def zadanie2(active):
         system2a = sig.lti(A2, B2, C2a, D2)
         system2b = sig.lti(A2, B2, C2b, D2)
         system2c = sig.lti(A2, B2, C2c, D2)
-        A2s=np.array([[0,1,0],[0,0,1],[11/6,1,1/6]])
+        A2s=np.array([[0,1,0],[0,0,1],[-1/6,-1,-11/6]])
         B2s=np.array([[0],[0],[1]])
         # 2.1 - Nie ponieważ nie będziemy mieli wszystkich współczynników.
         systemS2a = sig.lti(A2s, B2s, C2a, D2)
@@ -209,6 +209,6 @@ def zadanie3(active):
 
 
 if __name__ == '__main__':
-    zadanie1(True)
-    zadanie2(False)
+    zadanie1(False)
+    zadanie2(True)
     #zadanie3(False)
