@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import control
 
 #Kod zawiera pakiet 'control'
+#Powinno w danym momencie być aktywne jedno zadanie w mainie (inaczej wystąpią problemy z wyświetlaniem wykresów
 
 def checkControllability(cal,n):
     if np.linalg.matrix_rank(cal)==n:
@@ -14,6 +15,9 @@ def checkControllability(cal,n):
 
 def zadanie1(active):
     if active:
+        #1.1 - Tak, ponieważ w przeciwieństwie do transmitancji, istnieje nieskończenie wiele rozwiązań w przestrzeni
+        #      równiań stanu, które opisują ten sam system/model.
+        #
         # initialise RLC parameters
         r1 = 1
         r2 = 2
@@ -134,6 +138,11 @@ def zadanie1(active):
         plt.ylabel('System 4')
         plt.legend()
         plt.show()
+        #1.3a - Przebiegi odpowiedzi na wymuszenia układów, które są NIEsterowalne, pokrywają się - tzn. np. wszystkie
+        #       odpowiedzi skokowe są takie same, i wszystkie odpowiedzi na sygnał sin są takie same.
+        #       Przebiegi dpowiedzi na wymuszenia układów sterowalnych są różne i nie pokrywają się.
+        #1.3b - W przeciwieństwie do lsim, lsim2 wykorzystuje funkcję odeint to rozwiązania równania i wykonania
+        #       symulacji.
 
 def zadanie2(active):
     if active:
@@ -151,10 +160,39 @@ def zadanie2(active):
         system2a = sig.lti(A2, B2, C2a, D2)
         system2b = sig.lti(A2, B2, C2b, D2)
         system2c = sig.lti(A2, B2, C2c, D2)
-        As=np.array([[0,1,0],[0,0,1],[11/6,1,1/6]])
-        Bs=np.array([[0],[0],[1]])
-        # 2.1 - nie ponieważ nie będziemy mieli wszystkich współczynników
-
+        A2s=np.array([[0,1,0],[0,0,1],[11/6,1,1/6]])
+        B2s=np.array([[0],[0],[1]])
+        # 2.1 - Nie ponieważ nie będziemy mieli wszystkich współczynników.
+        systemS2a = sig.lti(A2s, B2s, C2a, D2)
+        systemS2b = sig.lti(A2s, B2s, C2b, D2)
+        systemS2c = sig.lti(A2s, B2s, C2c, D2)
+        t = np.linspace(0, 10, 1001)
+        step = np.ones_like(t)
+        ta, ya, xa = sig.lsim2(system2a, step, t)
+        tb, yb, xb = sig.lsim2(system2b, step, t)
+        tc, yc, xc = sig.lsim2(system2c, step, t)
+        tsa, ysa, xsa = sig.lsim2(systemS2a, step, t)
+        tsb, ysb, xsb = sig.lsim2(systemS2b, step, t)
+        tsc, ysc, xsc = sig.lsim2(systemS2c, step, t)
+        plt.figure(0)
+        plt.plot(t,ya,label='x1 bazowe')
+        plt.plot(t, yb, label='x2 bazowe')
+        plt.plot(t, yc, label='x3 bazowe')
+        plt.xlabel('Time')
+        plt.ylabel('System 2')
+        plt.legend()
+        plt.figure(1)
+        plt.plot(t, ysa, label='x1 sterowalne')
+        plt.plot(t, ysb, label='x2 sterowalne')
+        plt.plot(t, ysc, label='x3 sterowalne')
+        plt.xlabel('Time')
+        plt.ylabel('System 2')
+        plt.legend()
+        plt.show()
+        #2.2a - Tak, pownieważ nadal opisujemy ten sam obiekt, który sprowadziłby się do tej samej transmitancji
+        #2.2b - Nie, zmienne stanu są inaczej opisane i przez to mają inny przebieg, przy projektowaniu UAR
+        #       powinniśmy wybierać takie zmienne stanu, które zapewnią nam postać sterowalną układu, a zarazem
+        #       pozwolą na logiczną (realną) interpretację zmiennych stanu (co one opisują)
 
 if __name__ == '__main__':
     zadanie1(False)
