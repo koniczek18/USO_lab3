@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.signal
 import scipy.signal as sig
 #from scipy.integrate import odeint
 import matplotlib.pyplot as plt
@@ -202,13 +203,36 @@ def zadanie3(active):
         c2 = 2
         c3 = 3
         A2 = np.array([[-1 / (r1 * c1), 0, 0], [0, -1 / (r1 * c2), 0], [0, 0, -1 / (r1 * c3)]])
+        A2s=np.array([[0,1,0],[0,0,1],[-1/6,-1,-11/6]])
         B2 = np.array([[1 / (r1 * c1)], [1 / (r1 * c2)], [1 / (r1 * c3)]])
         C2a = np.array([1, 0, 0])
         C2b = np.array([0, 1, 0])
         C2c = np.array([0, 0, 1])
+        #A2s-bk=A_traget
+        A_target=np.array([[0,1,0],[0,0,1],[-8,-17,-10]])
+        B=np.array([[0],[0],[0]])
+        Ctarget_a = np.array([1, 0, 0])
+        Ctarget_b = np.array([0, 1, 0])
+        Ctarget_c = np.array([0, 0, 1])
+        D = np.array([0])
+        system1=sig.lti(A_target,B,Ctarget_a,D)
+        system2 = sig.lti(A_target, B, Ctarget_b, D)
+        system3 = sig.lti(A_target, B, Ctarget_c, D)
+        bk=A2s-A_target
+        k=np.array([7.833,16,8.166])
+        t=np.linspace(1,10,1001)
+        t1,y1,x1=scipy.signal.lsim2(system1,U=np.zeros_like(t),T=t,X0=np.array([5,0,0]))
+        t2, y2, x2 = scipy.signal.lsim2(system2, U=np.zeros_like(t), T=t, X0=np.array([0, 5, 0]))
+        t3, y3, x3 = scipy.signal.lsim2(system2, U=np.zeros_like(t), T=t, X0=np.array([0, 0, 5]))
+        plt.figure(0)
+        plt.plot(t1,y1,label='x1')
+        plt.plot(t2, y2, label='x2')
+        plt.plot(t3, y3, label='x3')
+        plt.legend()
+        plt.show()
 
 
 if __name__ == '__main__':
     zadanie1(False)
-    zadanie2(True)
-    #zadanie3(False)
+    zadanie2(False)
+    zadanie3(True)
